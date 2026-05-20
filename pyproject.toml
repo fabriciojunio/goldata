@@ -1,0 +1,82 @@
+[project]
+name = "goldata"
+version = "1.0.0"
+description = "GolData — Complete Football Analytics Platform with Machine Learning"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [{name = "Fabrício Júnio", email = "fabricio@ictustech.com.br"}]
+keywords = ["football", "soccer", "analytics", "machine-learning", "xg", "expected-goals", "brasileirao"]
+
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.1.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "aiosqlite>=0.19.0",
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "scipy>=1.12.0",
+    "scikit-learn>=1.4.0",
+    "xgboost>=2.0.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "plotly>=5.18.0",
+    "networkx>=3.2.0",
+    "requests>=2.31.0",
+    "httpx>=0.26.0",
+    "python-dotenv>=1.0.0",
+    "structlog>=24.1.0",
+    "cryptography>=42.0.0",
+    "joblib>=1.3.0",
+    "slowapi>=0.1.9",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "httpx>=0.26.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+]
+
+extras = [
+    "lightgbm>=4.3.0",
+    "shap>=0.44.0",
+    "mplsoccer>=1.2.0",
+    "statsbombpy>=1.11.0",
+    "socceraction>=1.5.0",
+    "reportlab>=4.1.0",
+]
+
+[project.scripts]
+goldata = "goldata.cli:main"
+
+[build-system]
+requires = ["setuptools>=69.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+ignore = ["S101", "S603", "S607", "N803", "N806"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --cov=goldata --cov-report=term-missing"
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
