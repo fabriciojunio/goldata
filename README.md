@@ -22,20 +22,56 @@ Plataforma completa de analytics de futebol com Machine Learning. Calcula Expect
 - **Plotly + Seaborn** (visualizações)
 - **Docker** (containerização)
 
-## Como Executar
+## Como rodar localmente
+
+### Pré-requisitos
+
+- **Python 3.11+**
+- **Docker** e **Docker Compose** (recomendado)
+
+### Com Docker (recomendado)
 
 ```bash
-# Com Docker (recomendado)
-docker compose up -d
+# 1. Clone o repositório
+git clone https://github.com/fabriciojunio/goldata.git
+cd goldata
 
-# Ou localmente
+# 2. Configure as variáveis de ambiente
+cp .env.example .env
+
+# 3. Suba os serviços
+docker compose up -d
+```
+
+Acesse:
+- **API:** [http://localhost:8000](http://localhost:8000)
+- **Documentação Swagger:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Sem Docker (ambiente local)
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/fabriciojunio/goldata.git
+cd goldata
+
+# 2. Crie e ative um ambiente virtual
+python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+.venv\Scripts\activate      # Windows
+
+# 3. Instale as dependências
 pip install -e ".[dev]"
+
+# 4. Configure as variáveis de ambiente
+cp .env.example .env
+
+# 5. Inicie a API
 uvicorn goldata.api.main:app --reload --port 8000
 ```
 
 ## Documentação da API
 
-Acesse `http://localhost:8000/docs` para a documentação interativa Swagger.
+Acesse [http://localhost:8000/docs](http://localhost:8000/docs) para a documentação interativa Swagger.
 
 ## Licença
 
