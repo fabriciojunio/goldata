@@ -1,4 +1,4 @@
-"""Métricas avançadas: xT (Expected Threat), calibração, avaliação de modelos."""
+﻿"""Métricas avançadas: xT (Expected Threat), calibração, avaliação de modelos."""
 
 import numpy as np
 import pandas as pd
@@ -27,7 +27,7 @@ _XT_BASE_GRID = np.array([
     [0.006, 0.007, 0.007, 0.008, 0.009, 0.011, 0.014, 0.021, 0.036, 0.070, 0.120, 0.250],
     [0.006, 0.006, 0.006, 0.007, 0.008, 0.010, 0.012, 0.018, 0.030, 0.060, 0.100, 0.200],
     [0.006, 0.006, 0.006, 0.006, 0.007, 0.008, 0.010, 0.012, 0.020, 0.040, 0.080, 0.150],
-])  # shape: (8, 12) — rows = y zones, cols = x zones
+])  # shape: (8, 12): rows = y zones, cols = x zones
 
 FIELD_LENGTH = 120.0
 FIELD_WIDTH = 80.0
@@ -41,7 +41,7 @@ def _pos_to_xt_zone(x: float, y: float) -> tuple[int, int]:
 
 class ExpectedThreat:
     """
-    xT — Expected Threat (Karun Singh, 2019).
+    xT: Expected Threat (Karun Singh, 2019).
 
     Mede o valor de cada ação (passe, dribble, corrida) em termos
     de aumento na probabilidade de gol.
@@ -145,7 +145,7 @@ class EvaluationMetrics:
         n_bins: int = 10,
     ) -> pd.DataFrame:
         """
-        Analisa calibração do modelo — compara prob prevista com freq real.
+        Analisa calibração do modelo: compara prob prevista com freq real.
 
         Returns:
             DataFrame com prob_mean, fraction_positive por bin
@@ -166,7 +166,7 @@ class EvaluationMetrics:
         n_bins: int = 10,
     ) -> float:
         """
-        Expected Calibration Error (ECE) — métrica compacta de calibração.
+        Expected Calibration Error (ECE): métrica compacta de calibração.
         0 = perfeitamente calibrado.
         """
         df = EvaluationMetrics.calibration_analysis(y_true, y_pred, n_bins)

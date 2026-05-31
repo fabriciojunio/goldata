@@ -1,4 +1,4 @@
-"""Cache em memória com TTL e cache em disco para artefatos pesados de ML."""
+﻿"""Cache em memória com TTL e cache em disco para artefatos pesados de ML."""
 
 import time
 from typing import Any
@@ -55,7 +55,7 @@ class CacheManager:
 
 
 class DiskCache:
-    """Cache em disco usando joblib.Memory — para modelos e dados pesados de ML."""
+    """Cache em disco usando joblib.Memory: para modelos e dados pesados de ML."""
 
     def __init__(self, cache_dir: str = "./data/cache") -> None:
         self._memory = joblib.Memory(cache_dir, verbose=0)

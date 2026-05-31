@@ -1,4 +1,4 @@
-"""Conexão assíncrona com banco de dados — PostgreSQL ou SQLite (fallback)."""
+﻿"""Conexão assíncrona com banco de dados: PostgreSQL ou SQLite (fallback)."""
 
 from collections.abc import AsyncGenerator
 from typing import Any
@@ -45,7 +45,7 @@ AsyncSessionLocal = async_sessionmaker(
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    """Dependency FastAPI — sessão de banco."""
+    """Dependency FastAPI: sessão de banco."""
     async with AsyncSessionLocal() as session:
         try:
             yield session

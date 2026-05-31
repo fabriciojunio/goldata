@@ -1,4 +1,4 @@
-"""Análise de pressing usando PPDA (Passes Allowed per Defensive Action)."""
+﻿"""Análise de pressing usando PPDA (Passes Allowed per Defensive Action)."""
 
 import numpy as np
 import pandas as pd
@@ -38,7 +38,7 @@ class PressingAnalyzer:
             opponent_team: time adversário
 
         Returns:
-            PPDA (float) — menor = pressing mais intenso
+            PPDA (float): menor = pressing mais intenso
         """
         # Passes do adversário na própria metade de campo (x < 60)
         opponent_passes = events_df[

@@ -1,4 +1,4 @@
-"""Logging estruturado com structlog — NUNCA loga dados pessoais ou secrets."""
+﻿"""Logging estruturado com structlog: NUNCA loga dados pessoais ou secrets."""
 
 import logging
 import sys
