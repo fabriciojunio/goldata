@@ -1,4 +1,4 @@
-"""Testes para cobrir branches específicos e chegar a 95%+ de cobertura."""
+﻿"""Testes para cobrir branches específicos e chegar a 95%+ de cobertura."""
 
 import pytest
 import numpy as np
@@ -93,7 +93,7 @@ def test_validate_odds_exactly_1():
     assert v.validate_odds(1.0) is True  # exatamente 1.0 é válido
 
 
-# ── models/base.py (linhas 82-93 — get_feature_importance fallback) ──────────
+# ── models/base.py (linhas 82-93: get_feature_importance fallback) ──────────
 
 def test_base_model_get_feature_importance_coef():
     """Modelo com coef_ deve retornar importância baseada em coeficientes."""
@@ -234,7 +234,7 @@ def test_monte_carlo_parallel():
     assert result.n_simulations == 20
 
 
-# ── models/transfers/analyzer.py (linhas 67-68 — com valuation model) ─────────
+# ── models/transfers/analyzer.py (linhas 67-68: com valuation model) ─────────
 
 def test_transfers_with_valuation_model(sample_player_stats_df):
     from goldata.models.transfers.analyzer import TransferAnalyzer
@@ -255,12 +255,12 @@ def test_transfers_with_valuation_model(sample_player_stats_df):
     assert isinstance(opps, list)
 
 
-# ── models/xg/advanced.py (linhas 30-32, 38-41 — ImportError branches) ──────
+# ── models/xg/advanced.py (linhas 30-32, 38-41: ImportError branches) ──────
 
 def test_advanced_xg_lgbm_fallback():
     """Testar que o modelo funciona com ou sem LightGBM."""
     from goldata.models.xg.advanced import AdvancedXGModel, _LGBM_AVAILABLE
-    # O _LGBM_AVAILABLE já está setado — apenas verificar que é bool
+    # O _LGBM_AVAILABLE já está setado: apenas verificar que é bool
     assert isinstance(_LGBM_AVAILABLE, bool)
 
 
@@ -282,7 +282,7 @@ def test_clustering_profiles_empty_cluster():
     assert len(profiles) >= 1
 
 
-# ── metrics/xmetrics.py (linhas 91-92 — permutation importance) ──────────────
+# ── metrics/xmetrics.py (linhas 91-92: permutation importance) ──────────────
 
 def test_evaluation_metrics_log_loss_finite():
     from goldata.metrics.xmetrics import EvaluationMetrics
@@ -293,7 +293,7 @@ def test_evaluation_metrics_log_loss_finite():
     assert np.isfinite(metrics["auc"])
 
 
-# ── viz/pitch.py (linhas 116-117 — goals scatter) ────────────────────────────
+# ── viz/pitch.py (linhas 116-117: goals scatter) ────────────────────────────
 
 def test_shotmap_with_goals_and_no_goals():
     import matplotlib

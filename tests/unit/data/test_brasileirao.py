@@ -1,4 +1,4 @@
-"""Testes do cliente de dados do Brasileirão."""
+﻿"""Testes do cliente de dados do Brasileirão."""
 
 import pytest
 import pandas as pd
@@ -90,5 +90,5 @@ def test_quality_factor_correct(client):
 def test_caching_works(client):
     df1 = client.get_serie_a_standings()
     df2 = client.get_serie_a_standings()
-    # Segundo call usa cache — não lança erro
+    # Segundo call usa cache: não lança erro
     assert len(df1) == len(df2)

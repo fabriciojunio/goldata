@@ -1,4 +1,4 @@
-"""Modelo xG posicional: probabilidade por zona do campo com suavização Bayesiana."""
+﻿"""Modelo xG posicional: probabilidade por zona do campo com suavização Bayesiana."""
 
 from dataclasses import dataclass
 
@@ -112,7 +112,7 @@ class PositionalXGModel(BaseMLModel):
         return self._xg_grid.copy()
 
     def get_zone_heatmap(self) -> np.ndarray:
-        """Alias para get_xg_grid — retorna heatmap de xG por zona."""
+        """Alias para get_xg_grid: retorna heatmap de xG por zona."""
         return self.get_xg_grid()
 
     def get_xg_for_position(self, x: float, y: float) -> float:
@@ -122,5 +122,5 @@ class PositionalXGModel(BaseMLModel):
         return float(self._xg_grid[col, row])
 
     def get_feature_importance(self) -> pd.DataFrame:
-        """Não aplicável para modelo posicional — retorna DataFrame vazio."""
+        """Não aplicável para modelo posicional: retorna DataFrame vazio."""
         return pd.DataFrame({"feature": ["x", "y"], "importance": [0.5, 0.5]})

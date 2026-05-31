@@ -1,4 +1,4 @@
-"""CLI do GolData — comandos de linha de comando."""
+﻿"""CLI do GolData: comandos de linha de comando."""
 
 import argparse
 import sys
@@ -47,7 +47,7 @@ def cmd_serve(args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="goldata",
-        description="GolData — Football Analytics Platform | Ictus Technologies",
+        description="GolData: Football Analytics Platform | Ictus Technologies",
     )
     sub = parser.add_subparsers(dest="command", help="Comando")
 

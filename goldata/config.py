@@ -1,4 +1,4 @@
-"""Configuração central do GolData via pydantic-settings."""
+﻿"""Configuração central do GolData via pydantic-settings."""
 
 from functools import lru_cache
 from typing import Literal
@@ -80,5 +80,5 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    """Singleton de configurações — mesma instância em toda a aplicação."""
+    """Singleton de configurações: mesma instância em toda a aplicação."""
     return Settings()

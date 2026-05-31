@@ -1,4 +1,4 @@
-"""Testes: injury risk, transfers, cartola, referee."""
+﻿"""Testes: injury risk, transfers, cartola, referee."""
 
 import pytest
 import numpy as np
@@ -103,7 +103,7 @@ def test_injury_risk_level_valid(trained_injury):
 
 def test_injury_overloaded_player_has_factors():
     """Jogador sobrecarregado deve ter fatores de risco identificados pela lógica de regras."""
-    # Criar player com sobrecarga clara — os fatores são extraídos por regras, não ML
+    # Criar player com sobrecarga clara: os fatores são extraídos por regras, não ML
     player = {"minutes_last_7_days": 270, "age": 34, "previous_injuries_12m": 3,
               "days_since_last_match": 1, "player_id": "overloaded"}
     # Verificar diretamente as regras de risco (independente do modelo ML)

@@ -1,4 +1,4 @@
-"""Exceções customizadas do GolData."""
+﻿"""Exceções customizadas do GolData."""
 
 from typing import Any
 
@@ -44,7 +44,7 @@ class ModelNotTrainedError(GolDataError):
 
 
 class InvalidInputError(GolDataError):
-    """Input inválido — fora de range, tipo errado, schema incorreto."""
+    """Input inválido: fora de range, tipo errado, schema incorreto."""
 
     def __init__(self, field: str, value: Any, reason: str) -> None:
         super().__init__(
@@ -77,7 +77,7 @@ class APIError(GolDataError):
 
 
 class SecurityError(GolDataError):
-    """Erro de segurança — autenticação, autorização, rate limit."""
+    """Erro de segurança: autenticação, autorização, rate limit."""
 
     def __init__(self, reason: str) -> None:
         super().__init__(
