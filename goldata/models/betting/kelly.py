@@ -1,4 +1,4 @@
-"""Kelly Criterion para dimensionamento ótimo de apostas."""
+﻿"""Kelly Criterion para dimensionamento ótimo de apostas."""
 
 import numpy as np
 import pandas as pd
@@ -8,7 +8,7 @@ from goldata.logging_config import get_logger
 
 logger = get_logger(__name__)
 
-DEFAULT_KELLY_FRACTION = 0.25  # 1/4 Kelly — mais conservador
+DEFAULT_KELLY_FRACTION = 0.25  # 1/4 Kelly: mais conservador
 MAX_BET_FRACTION = 0.05        # máximo 5% do bankroll por aposta
 
 

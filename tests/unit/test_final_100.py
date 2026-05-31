@@ -1,4 +1,4 @@
-"""
+﻿"""
 Testes finais para atingir 100% de cobertura.
 Cada teste cobre linhas específicas identificadas no relatório de cobertura.
 """
@@ -185,7 +185,7 @@ def test_cartola_optimize_pulp_if_available():
                                     slots={"GOL":1,"LAT":2,"ZAG":2,"MEI":3,"ATA":3,"TEC":1})
         assert draft.total_price <= 200.01
     else:
-        # PuLP não instalado — testar que greedy funciona
+        # PuLP não instalado: testar que greedy funciona
         draft = pred.optimize_draft(budget=200.0)
         assert draft is not None
 
@@ -195,7 +195,7 @@ def test_cartola_pulp_installed_optimize_draft():
     try:
         import pulp  # noqa: F401
     except ImportError:
-        pytest.skip("PuLP não instalado — skip teste PuLP")
+        pytest.skip("PuLP não instalado: skip teste PuLP")
 
     from goldata.models.fantasy.cartola_predictor import CartolaPredictor
     np.random.seed(7)

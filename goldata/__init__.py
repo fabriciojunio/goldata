@@ -1,4 +1,4 @@
-"""GolData — Football Analytics Platform with Machine Learning.
+﻿"""GolData: Football Analytics Platform with Machine Learning.
 
 Motor de analytics esportivos da Ictus Technologies.
 Autor: Fabrício Júnio | ictustech.com.br

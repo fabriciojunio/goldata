@@ -1,4 +1,4 @@
-"""Testes do módulo de segurança e LGPD."""
+﻿"""Testes do módulo de segurança e LGPD."""
 
 import pytest
 from goldata.security import (
@@ -34,7 +34,7 @@ def test_encrypt_produces_different_tokens_same_input():
     mgr = EncryptionManager(SECRET)
     t1 = mgr.encrypt("goldata")
     t2 = mgr.encrypt("goldata")
-    # Fernet usa IV aleatório — tokens diferentes mesmo para mesmo input
+    # Fernet usa IV aleatório: tokens diferentes mesmo para mesmo input
     assert t1 != t2
 
 

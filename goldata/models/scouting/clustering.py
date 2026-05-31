@@ -1,4 +1,4 @@
-"""Clustering de jogadores por perfil de jogo — K-Means com k=8."""
+﻿"""Clustering de jogadores por perfil de jogo: K-Means com k=8."""
 
 from dataclasses import dataclass
 

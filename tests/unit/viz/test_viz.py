@@ -1,4 +1,4 @@
-"""Testes de visualizações — verifica que as funções retornam fig, ax sem erros."""
+﻿"""Testes de visualizações: verifica que as funções retornam fig, ax sem erros."""
 
 import pytest
 import numpy as np

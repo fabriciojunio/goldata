@@ -1,4 +1,4 @@
-"""Testes de feature engineering."""
+﻿"""Testes de feature engineering."""
 
 import math
 import pytest
@@ -87,7 +87,7 @@ def test_extract_shot_features_freekick_detected():
 
 
 def test_extract_shot_features_penalty_larger_than_distance():
-    """Pênalti (distância ~12m) vs chute de longe (~35m) — distância menor no pênalti."""
+    """Pênalti (distância ~12m) vs chute de longe (~35m): distância menor no pênalti."""
     penalty = fe.extract_shot_features({"x": 108, "y": 40, "technique": "penalty"})
     long_shot = fe.extract_shot_features({"x": 85, "y": 40})
     assert penalty["distance_to_goal"] < long_shot["distance_to_goal"]

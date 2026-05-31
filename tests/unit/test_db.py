@@ -1,4 +1,4 @@
-"""Testes do banco de dados SQLAlchemy async."""
+﻿"""Testes do banco de dados SQLAlchemy async."""
 
 import pytest
 import pytest_asyncio
@@ -240,7 +240,7 @@ async def test_create_and_drop_tables():
 
 @pytest.mark.asyncio
 async def test_player_birth_year_only(db_session):
-    """Apenas ano de nascimento é armazenado (LGPD — minimização)."""
+    """Apenas ano de nascimento é armazenado (LGPD: minimização)."""
     player = Player(
         name_hash=hash_personal_data("Some Player"),
         display_name="Some Player",

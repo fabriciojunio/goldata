@@ -1,4 +1,4 @@
-"""Simulador de liga via Monte Carlo com suporte ao Brasileirão (G4/G6/Z4)."""
+﻿"""Simulador de liga via Monte Carlo com suporte ao Brasileirão (G4/G6/Z4)."""
 
 from dataclasses import dataclass, field
 from typing import Any
@@ -182,11 +182,11 @@ class LeagueSimulator:
         return pd.DataFrame(records).sort_values("relegation_prob", ascending=False).reset_index(drop=True)
 
     def get_libertadores_race(self, result: SimulationResult) -> pd.DataFrame:
-        """G4 — Classificação para a Libertadores (Top 4 do Brasileirão)."""
+        """G4: Classificação para a Libertadores (Top 4 do Brasileirão)."""
         records = [{"team": t, "libertadores_prob": p} for t, p in result.top4_probs.items()]
         return pd.DataFrame(records).sort_values("libertadores_prob", ascending=False).reset_index(drop=True)
 
     def get_sulamericana_race(self, result: SimulationResult) -> pd.DataFrame:
-        """G6 — Classificação para a Sul-Americana (Top 6 do Brasileirão)."""
+        """G6: Classificação para a Sul-Americana (Top 6 do Brasileirão)."""
         records = [{"team": t, "sulamericana_prob": p} for t, p in result.top6_probs.items()]
         return pd.DataFrame(records).sort_values("sulamericana_prob", ascending=False).reset_index(drop=True)

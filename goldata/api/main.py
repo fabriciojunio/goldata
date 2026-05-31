@@ -1,4 +1,4 @@
-"""GolData FastAPI — Motor de Football Analytics."""
+﻿"""GolData FastAPI: Motor de Football Analytics."""
 
 from contextlib import asynccontextmanager
 from typing import Any
@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="GolData API",
-    description="Football Analytics Platform — Ictus Technologies",
+    description="Football Analytics Platform: Ictus Technologies",
     version=settings.version,
     docs_url="/docs",
     redoc_url="/redoc",
@@ -140,7 +140,7 @@ async def health_check() -> dict[str, Any]:
         "status": "healthy",
         "version": settings.version,
         "environment": settings.environment,
-        "project": "GolData — Ictus Technologies",
+        "project": "GolData: Ictus Technologies",
     }
 
 

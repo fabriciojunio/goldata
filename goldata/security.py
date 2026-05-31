@@ -1,4 +1,4 @@
-"""Módulo de segurança do GolData — autenticação, LGPD, criptografia."""
+﻿"""Módulo de segurança do GolData: autenticação, LGPD, criptografia."""
 
 import hashlib
 import html
