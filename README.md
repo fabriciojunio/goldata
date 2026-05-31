@@ -6,7 +6,7 @@ Plataforma completa de analytics de futebol com Machine Learning. Calcula Expect
 
 - **xG (Expected Goals)**: Modelo XGBoost com features de posição, ângulo e pressão
 - **Expected Assists (xA)**: Predição de probabilidade de assistência por passe
-- **Rede de Passes**: Análise com NetworkX — centralidade, hubs, fluidez tática
+- **Rede de Passes**: Análise com NetworkX: centralidade, hubs, fluidez tática
 - **Predição de Resultados**: Modelos Poisson, Dixon-Coles, Elo e Monte Carlo
 - **Scouting**: Clustering de jogadores similares e projeção de mercado
 - **Cartola FC**: Predição de pontuação para fantasy football brasileiro
