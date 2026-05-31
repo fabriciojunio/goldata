@@ -18,3 +18,5 @@ data/raw/
 models/*.joblib
 models/*.pkl
 *.log
+
+.github/java-upgrade/
