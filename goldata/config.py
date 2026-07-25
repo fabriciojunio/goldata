@@ -7,7 +7,8 @@ from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Valores padrão de desenvolvimento que jamais podem ir para produção.
-_DEFAULT_SECRET_KEY = "goldata-dev-secret-key-change-in-production-32chars!!"
+# Não são segredos reais: o validador abaixo rejeita ambos quando ENVIRONMENT=production.
+_DEFAULT_SECRET_KEY = "goldata-dev-secret-key-change-in-production-32chars!!"  # nosec B105
 _DEFAULT_API_KEY = "goldata-dev-api-key"
 
 
