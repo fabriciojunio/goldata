@@ -1,15 +1,14 @@
 ﻿"""Testes: injury risk, transfers, cartola, referee."""
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
-from goldata.models.injury.risk_predictor import InjuryRiskPredictor, INJURY_FEATURES
-from goldata.models.transfers.analyzer import TransferAnalyzer
-from goldata.models.fantasy.cartola_predictor import CartolaPredictor, CARTOLA_POSITIONS
-from goldata.models.referee.analyzer import RefereeAnalyzer
 from goldata.exceptions import ModelNotTrainedError
-
+from goldata.models.fantasy.cartola_predictor import CartolaPredictor
+from goldata.models.injury.risk_predictor import InjuryRiskPredictor
+from goldata.models.referee.analyzer import RefereeAnalyzer
+from goldata.models.transfers.analyzer import TransferAnalyzer
 
 # ── Fixtures compartilhados ───────────────────────────────────────────────────
 

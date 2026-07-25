@@ -1,9 +1,9 @@
 """Testes dos validadores de dados."""
 
 import pytest
+
 from goldata.data.validators import DataValidator
 from goldata.exceptions import InvalidInputError
-
 
 v = DataValidator()
 

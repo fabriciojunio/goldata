@@ -1,7 +1,9 @@
 """Testes do sistema de cache."""
 
 import time
+
 import pytest
+
 from goldata.cache import CacheManager
 
 

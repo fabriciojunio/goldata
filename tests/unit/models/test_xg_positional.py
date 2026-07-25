@@ -1,10 +1,11 @@
 """Testes do modelo xG posicional."""
 
-import pytest
 import numpy as np
 import pandas as pd
-from goldata.models.xg.positional import PositionalXGModel, GRID_X, GRID_Y
+import pytest
+
 from goldata.exceptions import ModelNotTrainedError
+from goldata.models.xg.positional import GRID_X, GRID_Y, PositionalXGModel
 
 
 @pytest.fixture

@@ -1,13 +1,12 @@
 """Testes dos modelos de previsão."""
 
-import pytest
-import numpy as np
 import pandas as pd
-from goldata.models.prediction.elo import EloRating, DEFAULT_RATING
-from goldata.models.prediction.poisson import BivariatePoisson
-from goldata.models.prediction.dixon_coles import DixonColes
-from goldata.models.prediction.monte_carlo import LeagueSimulator
+import pytest
 
+from goldata.models.prediction.dixon_coles import DixonColes
+from goldata.models.prediction.elo import DEFAULT_RATING, EloRating
+from goldata.models.prediction.monte_carlo import LeagueSimulator
+from goldata.models.prediction.poisson import BivariatePoisson
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 

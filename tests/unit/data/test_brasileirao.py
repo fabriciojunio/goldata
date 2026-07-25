@@ -1,8 +1,9 @@
 ﻿"""Testes do cliente de dados do Brasileirão."""
 
-import pytest
 import pandas as pd
-from goldata.data.brasileirao import BrasileiraoDataClient, BRASILEIRAO_QUALITY_FACTOR
+import pytest
+
+from goldata.data.brasileirao import BRASILEIRAO_QUALITY_FACTOR, BrasileiraoDataClient
 
 
 @pytest.fixture

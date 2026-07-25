@@ -3,17 +3,15 @@ Testes específicos para cobrir cada linha restante e atingir 100% de cobertura.
 Cada teste tem comentário indicando exatamente qual linha/branch cobre.
 """
 
-import pytest
-import asyncio
+from unittest.mock import MagicMock, patch
+
+import matplotlib
 import numpy as np
 import pandas as pd
-import tempfile
-import os
-from unittest.mock import patch, MagicMock, AsyncMock
-import matplotlib
+import pytest
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
 
 # ═══════════════════════════════════════════════════════════════════
 # api/main.py  linhas 40-43 (lifespan startup/shutdown) e 165 (freekick branch)
@@ -22,6 +20,7 @@ import matplotlib.pyplot as plt
 def test_api_lifespan_startup_shutdown():
     """Cobre linhas 40-43: configure_logging + logger.info no lifespan."""
     from fastapi.testclient import TestClient
+
     from goldata.api.main import app
     with TestClient(app) as client:
         r = client.get("/health")
@@ -31,6 +30,7 @@ def test_api_lifespan_startup_shutdown():
 def test_api_xg_freekick_branch():
     """Cobre linha 165: xg_positional * 0.7 para freekick."""
     from fastapi.testclient import TestClient
+
     from goldata.api.main import app
     from goldata.config import get_settings
     settings = get_settings()
@@ -53,11 +53,12 @@ def test_api_xg_freekick_branch():
 def test_cli_serve_branch():
     """Cobre linhas 37-38: import uvicorn + uvicorn.run no cmd_serve."""
     import sys
-    from unittest.mock import patch, MagicMock
+    from unittest.mock import MagicMock, patch
     mock_uvicorn = MagicMock()
     with patch.dict(sys.modules, {"uvicorn": mock_uvicorn}):
-        from goldata import cli
         import importlib
+
+        from goldata import cli
         importlib.reload(cli)
         args = MagicMock()
         args.host = "0.0.0.0"
@@ -69,7 +70,7 @@ def test_cli_serve_branch():
 
 def test_cli_main_serve_command(capsys):
     """Cobre linhas 77, 84: branch serve no main."""
-    from unittest.mock import patch, MagicMock
+    from unittest.mock import MagicMock, patch
     mock_uvicorn = MagicMock()
     with patch("sys.argv", ["goldata", "serve", "--port", "9999"]):
         with patch("goldata.cli.cmd_serve") as mock_serve:
@@ -112,7 +113,7 @@ def test_brasileirao_cache_hit(tmp_path):
 
 def test_brasileirao_home_advantage_no_away_games(tmp_path):
     """Cobre 214, 228: fallback quando time não tem jogos fora/casa."""
-    from goldata.data.brasileirao import BrasileiraoDataClient, HOME_ADVANTAGE_DEFAULT
+    from goldata.data.brasileirao import HOME_ADVANTAGE_DEFAULT, BrasileiraoDataClient
     client = BrasileiraoDataClient(data_dir=str(tmp_path))
 
     # Criar matches onde o time só joga em casa (nunca fora)
@@ -221,7 +222,7 @@ def test_xt_per_player_missing_end_cols():
 
 def test_base_model_feature_importance_fallback():
     """Cobre 82-93: modelo sem feature_importances_ nem coef_ retorna zeros."""
-    from goldata.models.base import BaseMLModel, TrainResult
+    from goldata.models.base import BaseMLModel
 
     class MinimalModel(BaseMLModel):
         model_name = "MinimalModel"
@@ -241,8 +242,8 @@ def test_base_model_feature_importance_fallback():
 
 def test_base_model_check_trained_raises():
     """Cobre linha 82: _check_trained lançando em get_feature_importance."""
-    from goldata.models.base import BaseMLModel
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.base import BaseMLModel
 
     class M(BaseMLModel):
         model_name = "M"
@@ -317,8 +318,9 @@ def test_cartola_unknown_position_fallback():
 
 def test_cartola_optimize_tries_pulp_then_greedy():
     """Cobre linhas 231-250: _optimize_pulp é tentado e cai no greedy se PuLP falha."""
-    from goldata.models.fantasy.cartola_predictor import CartolaPredictor
     import numpy as np
+
+    from goldata.models.fantasy.cartola_predictor import CartolaPredictor
     np.random.seed(0)
     n = 20
     positions = ["GOL"] * 2 + ["LAT"] * 4 + ["ZAG"] * 4 + ["MEI"] * 4 + ["ATA"] * 4 + ["TEC"] * 2
@@ -352,8 +354,9 @@ def test_cartola_optimize_tries_pulp_then_greedy():
 
 def test_injury_prepare_missing_features():
     """Cobre linha 68: _prepare preenche features ausentes com 0.0."""
-    from goldata.models.injury.risk_predictor import InjuryRiskPredictor
     import numpy as np
+
+    from goldata.models.injury.risk_predictor import InjuryRiskPredictor
     model = InjuryRiskPredictor(random_state=42)
     # Treinar com dados mínimos
     X = pd.DataFrame({"age": np.random.uniform(18, 35, 60),
@@ -368,8 +371,9 @@ def test_injury_prepare_missing_features():
 
 def test_injury_minutes_overload_factor():
     """Cobre linha 109: fator 'Sobrecarga semanal' quando minutes_last_7_days > 180."""
-    from goldata.models.injury.risk_predictor import InjuryRiskPredictor, INJURY_FEATURES
     import numpy as np
+
+    from goldata.models.injury.risk_predictor import INJURY_FEATURES, InjuryRiskPredictor
     model = InjuryRiskPredictor(random_state=42)
     X = pd.DataFrame({f: np.random.uniform(0, 1, 80) for f in INJURY_FEATURES})
     y = pd.Series(np.random.randint(0, 4, 80))
@@ -382,8 +386,8 @@ def test_injury_minutes_overload_factor():
 
 def test_injury_batch_predict_raises_before_train():
     """Cobre linha 134: predict_batch levanta ModelNotTrainedError."""
-    from goldata.models.injury.risk_predictor import InjuryRiskPredictor
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.injury.risk_predictor import InjuryRiskPredictor
     model = InjuryRiskPredictor()
     with pytest.raises(ModelNotTrainedError):
         model.predict_batch(pd.DataFrame({"age": [25]}))
@@ -456,7 +460,7 @@ def test_referee_profiles_dataframe_empty():
 
 def test_clustering_empty_cluster_skipped():
     """Cobre linha 114: continue quando cluster vazio."""
-    from goldata.models.scouting.clustering import PlayerClusterer, CLUSTERING_FEATURES
+    from goldata.models.scouting.clustering import CLUSTERING_FEATURES, PlayerClusterer
     # Dados concentrados em dois grupos → alguns clusters ficam vazios
     df1 = pd.DataFrame({f: [1.0] * 20 for f in CLUSTERING_FEATURES})
     df2 = pd.DataFrame({f: [0.0] * 20 for f in CLUSTERING_FEATURES})
@@ -468,8 +472,8 @@ def test_clustering_empty_cluster_skipped():
 
 def test_clustering_predict_raises_not_trained():
     """Cobre linha 141: predict levanta quando não treinado."""
-    from goldata.models.scouting.clustering import PlayerClusterer
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.clustering import PlayerClusterer
     c = PlayerClusterer()
     with pytest.raises(ModelNotTrainedError):
         c.predict(pd.DataFrame({"x": [1]}))
@@ -477,8 +481,8 @@ def test_clustering_predict_raises_not_trained():
 
 def test_clustering_predict_with_distance_raises():
     """Cobre linha 155: predict_with_distance levanta quando não treinado."""
-    from goldata.models.scouting.clustering import PlayerClusterer
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.clustering import PlayerClusterer
     c = PlayerClusterer()
     with pytest.raises(ModelNotTrainedError):
         c.predict_with_distance(pd.DataFrame({"x": [1]}))
@@ -486,8 +490,8 @@ def test_clustering_predict_with_distance_raises():
 
 def test_clustering_inertia_raises():
     """Cobre linha 161: get_inertia levanta quando não treinado."""
-    from goldata.models.scouting.clustering import PlayerClusterer
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.clustering import PlayerClusterer
     c = PlayerClusterer()
     with pytest.raises(ModelNotTrainedError):
         c.get_inertia()
@@ -558,8 +562,8 @@ def test_similarity_missing_features_filled():
 
 def test_similarity_find_raises_not_trained():
     """Cobre linha 139: find_similar levanta quando não treinado."""
-    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     engine = PlayerSimilarityEngine()
     with pytest.raises(ModelNotTrainedError):
         engine.find_similar("p1")
@@ -567,8 +571,8 @@ def test_similarity_find_raises_not_trained():
 
 def test_similarity_score_raises_data_not_found():
     """Cobre linha 142: similarity_score levanta quando player não existe."""
-    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     from goldata.exceptions import DataNotFoundError
+    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     df = pd.DataFrame({
         "player_id": ["p1", "p2"],
         **{f: [0.5, 0.3] for f in
@@ -616,8 +620,8 @@ def test_valuation_no_age_column():
 
 def test_valuation_predict_raises_not_trained():
     """Cobre linha 96: predict levanta quando não treinado."""
-    from goldata.models.scouting.valuation import PlayerValuationModel
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.valuation import PlayerValuationModel
     model = PlayerValuationModel()
     with pytest.raises(ModelNotTrainedError):
         model.predict(pd.DataFrame({"age": [25]}))
@@ -714,8 +718,8 @@ def test_transfers_overvalued_no_market_col():
 
 def test_transfers_with_trained_valuation_model():
     """Cobre linha 129: usa valuation model treinado para estimar valor."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.valuation import PlayerValuationModel
+    from goldata.models.transfers.analyzer import TransferAnalyzer
     np.random.seed(42)
     n = 30
     df = pd.DataFrame({
@@ -748,8 +752,8 @@ def test_transfers_replacement_cost_no_similarity():
 
 def test_transfers_replacement_cost_with_similarity():
     """Cobre linha 187: retorna affordable players."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.similarity import PlayerSimilarityEngine
+    from goldata.models.transfers.analyzer import TransferAnalyzer
     feature_cols = ["goals_per_90", "assists_per_90", "xg_per_90", "xa_per_90",
                     "shots_per_90", "key_passes_per_90", "progressive_passes_per_90",
                     "tackles_per_90", "interceptions_per_90", "pressures_per_90",
@@ -778,12 +782,11 @@ def test_transfers_replacement_cost_with_similarity():
 
 def test_advanced_xg_without_lgbm(sample_shots_df):
     """Cobre 84-96: fallback para XGBoost duplo quando LightGBM indisponível."""
-    import sys
-    from goldata.models.xg.advanced import XG_ADVANCED_FEATURES
     # Simular ausência de LightGBM forçando o path do fallback diretamente
     with patch("goldata.models.xg.advanced._LGBM_AVAILABLE", False):
-        from goldata.models.xg import advanced as adv_module
         import importlib
+
+        from goldata.models.xg import advanced as adv_module
         importlib.reload(adv_module)
         model = adv_module.AdvancedXGModel(random_state=42)
         X = sample_shots_df
@@ -796,7 +799,7 @@ def test_advanced_xg_without_lgbm(sample_shots_df):
 
 def test_advanced_xg_without_shap(sample_shots_df):
     """Cobre 153-172: permutation importance quando SHAP indisponível."""
-    from goldata.models.xg.advanced import AdvancedXGModel, XG_ADVANCED_FEATURES
+    from goldata.models.xg.advanced import AdvancedXGModel
     model = AdvancedXGModel(random_state=42)
     X = sample_shots_df
     y = sample_shots_df["is_goal"]
@@ -843,8 +846,9 @@ def test_sanitize_dict_non_string_passthrough():
 
 def test_anonymize_birth_date_invalid_format():
     """Cobre 109-110: except quando str()[:4] lança exceção via mock."""
-    from goldata.security import anonymize_player_data
     from unittest.mock import patch
+
+    from goldata.security import anonymize_player_data
 
     class BadStr:
         """Objeto cujo str() lança exceção no slice."""
@@ -878,7 +882,8 @@ def test_plot_shot_map_no_x_column():
 @pytest.mark.asyncio
 async def test_db_get_db_generator():
     """Cobre 49-57: get_db commit normal."""
-    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
     from goldata.db.models import Base
     engine = create_async_engine("sqlite+aiosqlite:///:memory:", echo=False)
     async with engine.begin() as conn:
@@ -906,7 +911,8 @@ async def test_db_get_db_generator():
 @pytest.mark.asyncio
 async def test_db_get_db_rollback_on_exception():
     """Cobre 67-69: rollback quando exception é levantada."""
-    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
     from goldata.db.models import Base
     engine = create_async_engine("sqlite+aiosqlite:///:memory:", echo=False)
     async with engine.begin() as conn:
@@ -934,8 +940,9 @@ async def test_db_get_db_rollback_on_exception():
 
 def test_db_engine_fallback_sqlite():
     """Cobre 30-33: fallback para SQLite quando create_async_engine lança exceção."""
-    import goldata.db.connection as conn_mod
     from sqlalchemy.ext.asyncio import create_async_engine as _orig
+
+    import goldata.db.connection as conn_mod
 
     call_count = [0]
     def mock_engine(url, **kwargs):

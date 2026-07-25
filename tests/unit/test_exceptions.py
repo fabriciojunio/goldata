@@ -1,6 +1,5 @@
 """Testes das exceções customizadas."""
 
-import pytest
 from goldata.exceptions import (
     APIError,
     DatabaseError,

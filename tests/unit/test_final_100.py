@@ -3,11 +3,11 @@ Testes finais para atingir 100% de cobertura.
 Cada teste cobre linhas específicas identificadas no relatório de cobertura.
 """
 
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
 import pandas as pd
-from unittest.mock import patch, MagicMock
-
+import pytest
 
 # ══════════════════════════════════════════════════════════════════
 # cli.py linha 84: if __name__ == "__main__": main()
@@ -38,7 +38,7 @@ def test_brasileirao_matches_cache_hit(tmp_path):
 
 def test_brasileirao_home_advantage_zero_away_ppg(tmp_path):
     """Cobre linha 228: away_ppg == 0 → return HOME_ADVANTAGE_DEFAULT."""
-    from goldata.data.brasileirao import BrasileiraoDataClient, HOME_ADVANTAGE_DEFAULT
+    from goldata.data.brasileirao import HOME_ADVANTAGE_DEFAULT, BrasileiraoDataClient
     client = BrasileiraoDataClient(data_dir=str(tmp_path))
 
     # Forçar situação onde away_ppg = 0 (time nunca ganhou fora)
@@ -81,8 +81,9 @@ def test_brasileirao_home_advantage_zero_away_ppg(tmp_path):
 @pytest.mark.asyncio
 async def test_check_connection_returns_false_on_error():
     """Cobre 67-69: check_connection captura exceção e retorna False."""
-    import goldata.db.connection as conn_mod
     from unittest.mock import AsyncMock, MagicMock, patch
+
+    import goldata.db.connection as conn_mod
 
     mock_session = AsyncMock()
     mock_session.execute.side_effect = Exception("DB indisponível")
@@ -249,8 +250,8 @@ def test_monte_carlo_simulate_index_based_table():
 
 def test_clustering_predict_with_distance_not_trained():
     """Cobre linha 155: predict_with_distance levanta ModelNotTrainedError."""
-    from goldata.models.scouting.clustering import PlayerClusterer
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.clustering import PlayerClusterer
     c = PlayerClusterer()
     # _kmeans is None → linha 155
     with pytest.raises(ModelNotTrainedError):
@@ -263,7 +264,7 @@ def test_clustering_predict_with_distance_not_trained():
 
 def test_projection_multiplier_current_age_zero_curve():
     """Cobre linha 70: divisão evitada quando current_val é zero."""
-    from goldata.models.scouting.projection import PerformanceProjector, _AGE_CURVE_BASE
+    from goldata.models.scouting.projection import _AGE_CURVE_BASE, PerformanceProjector
 
     proj = PerformanceProjector()
     # Forçar current_val = 0 mockando a curva
@@ -282,8 +283,8 @@ def test_projection_multiplier_current_age_zero_curve():
 
 def test_similarity_find_similar_not_trained_vectors_none():
     """Cobre linha 139: _player_vectors is None levanta ModelNotTrainedError."""
-    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     engine = PlayerSimilarityEngine()
     engine.is_trained = False  # força is_trained = False
     engine._player_vectors = None
@@ -297,8 +298,8 @@ def test_similarity_find_similar_not_trained_vectors_none():
 
 def test_valuation_feature_importance_raises_not_trained():
     """Cobre linha 96 via get_feature_importance quando não treinado."""
-    from goldata.models.scouting.valuation import PlayerValuationModel
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.valuation import PlayerValuationModel
     model = PlayerValuationModel()
     with pytest.raises(ModelNotTrainedError):
         model.get_feature_importance()
@@ -311,8 +312,8 @@ def test_valuation_feature_importance_raises_not_trained():
 
 def test_transfers_similarity_returns_names():
     """Cobre linha 93: similar = [s.display_name for s in sims]."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.similarity import PlayerSimilarityEngine
+    from goldata.models.transfers.analyzer import TransferAnalyzer
 
     feature_cols = ["goals_per_90","assists_per_90","xg_per_90","xa_per_90",
                     "shots_per_90","key_passes_per_90","progressive_passes_per_90",
@@ -339,8 +340,8 @@ def test_transfers_similarity_returns_names():
 
 def test_transfers_valuation_predict_branch():
     """Cobre linha 129: valuation.predict() é chamado quando modelo treinado."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.valuation import PlayerValuationModel
+    from goldata.models.transfers.analyzer import TransferAnalyzer
 
     feature_cols = ["goals_per_90","assists_per_90","xg_per_90","xa_per_90",
                     "shots_per_90","key_passes_per_90","progressive_passes_per_90",
@@ -377,9 +378,8 @@ def test_transfers_replacement_exception_returns_empty():
 
 def test_transfers_replacement_no_player_id_col():
     """Cobre linha 180: retorna DataFrame com colunas de SimilarPlayer quando sem player_id."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.similarity import PlayerSimilarityEngine
-    from goldata.models.scouting.similarity import SimilarPlayer
+    from goldata.models.transfers.analyzer import TransferAnalyzer
 
     feature_cols = ["goals_per_90","assists_per_90","xg_per_90","xa_per_90",
                     "shots_per_90","key_passes_per_90","progressive_passes_per_90",
@@ -415,7 +415,6 @@ def test_advanced_xg_lgbm_not_available_path(sample_shots_df):
 
     # Patch direto na instância: forçar o branch do fallback
     with patch.object(adv, "_LGBM_AVAILABLE", False):
-        from goldata.models.xg.advanced import XG_ADVANCED_FEATURES
         model = adv.AdvancedXGModel(random_state=0)
         # Verificar que sem LGBM, o segundo modelo é XGBClassifier
         from xgboost import XGBClassifier
@@ -465,7 +464,6 @@ def test_advanced_xg_shap_uses_xtrain_when_available(sample_shots_df):
 def test_advanced_xg_module_importerror_lgbm():
     """Cobre 30-32: branch except ImportError do LightGBM."""
     import sys
-    import importlib
 
     # Remover lgbm do sys.modules e bloquear import
     lgbm_backup = sys.modules.pop("lightgbm", None)
@@ -480,7 +478,6 @@ def test_advanced_xg_module_importerror_lgbm():
             sys.modules["lightgbm"] = lgbm_backup
         if "goldata.models.xg.advanced" in sys.modules:
             del sys.modules["goldata.models.xg.advanced"]
-        import goldata.models.xg.advanced  # restaurar
 
 
 def test_advanced_xg_module_importerror_shap():
@@ -499,4 +496,3 @@ def test_advanced_xg_module_importerror_shap():
             sys.modules["shap"] = shap_backup
         if "goldata.models.xg.advanced" in sys.modules:
             del sys.modules["goldata.models.xg.advanced"]
-        import goldata.models.xg.advanced  # restaurar

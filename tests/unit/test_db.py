@@ -1,18 +1,25 @@
 ﻿"""Testes do banco de dados SQLAlchemy async."""
 
+
 import pytest
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from goldata.db.models import (
-    Base, Match, Team, Player, Shot, PlayerStats,
-    TeamStats, Prediction, ScoutingReport, AuditLog,
-)
 from goldata.db.connection import check_connection, create_all_tables, drop_all_tables
+from goldata.db.models import (
+    AuditLog,
+    Base,
+    Match,
+    Player,
+    PlayerStats,
+    Prediction,
+    ScoutingReport,
+    Shot,
+    Team,
+    TeamStats,
+)
 from goldata.security import hash_personal_data
-from datetime import datetime, timezone
-
 
 # Engine de teste em memória (SQLite)
 TEST_DB_URL = "sqlite+aiosqlite:///:memory:"
@@ -224,12 +231,12 @@ async def test_check_connection():
 async def test_create_and_drop_tables():
     """create_all_tables e drop_all_tables devem funcionar."""
     engine = create_async_engine("sqlite+aiosqlite:///:memory:", echo=False)
-    
+
     # Substituir engine temporariamente
     import goldata.db.connection as conn_module
     original_engine = conn_module.engine
     conn_module.engine = engine
-    
+
     try:
         await create_all_tables()
         await drop_all_tables()
@@ -252,7 +259,7 @@ async def test_player_birth_year_only(db_session):
     assert player.birth_year == 1995
 
 
-@pytest.mark.asyncio  
+@pytest.mark.asyncio
 async def test_multiple_predictions_for_match(db_session):
     """Uma partida pode ter previsões de múltiplos modelos."""
     match = Match(competition="Brasileirão", season="2024",
@@ -266,9 +273,9 @@ async def test_multiple_predictions_for_match(db_session):
             home_win_prob=0.45, draw_prob=0.30, away_win_prob=0.25,
         )
         db_session.add(pred)
-    
+
     await db_session.commit()
-    
+
     from sqlalchemy import select
     result = await db_session.execute(
         select(Prediction).where(Prediction.match_id == match.id)

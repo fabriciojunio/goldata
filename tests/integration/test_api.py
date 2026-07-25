@@ -2,6 +2,7 @@
 
 import pytest
 from fastapi.testclient import TestClient
+
 from goldata.api.main import app
 from goldata.config import get_settings
 

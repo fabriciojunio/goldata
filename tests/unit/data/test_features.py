@@ -1,11 +1,8 @@
 ﻿"""Testes de feature engineering."""
 
-import math
 import pytest
-import numpy as np
-import pandas as pd
-from goldata.data.features import FeatureEngineer, GOAL_X, GOAL_Y_CENTER
 
+from goldata.data.features import FeatureEngineer
 
 fe = FeatureEngineer()
 

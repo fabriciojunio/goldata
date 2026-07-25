@@ -1,9 +1,8 @@
 """Testes dos módulos táticos: passing network e pressing."""
 
-import pytest
-import numpy as np
-import pandas as pd
 import networkx as nx
+import pandas as pd
+import pytest
 
 from goldata.models.tactical.passing_network import PassingNetworkAnalyzer, PassingNetworkStats
 from goldata.models.tactical.pressing import PressingAnalyzer

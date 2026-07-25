@@ -1,14 +1,13 @@
 """Testes extras para garantir cobertura mínima de 300+."""
 
-import pytest
 import numpy as np
-import pandas as pd
+import pytest
 
-from goldata.models.scouting.projection import PerformanceProjector
-from goldata.models.betting.kelly import kelly_fraction, fractional_kelly, kelly_stake
-from goldata.metrics.xmetrics import ExpectedThreat, EvaluationMetrics
-from goldata.models.tactical.pressing import PressingAnalyzer
+from goldata.metrics.xmetrics import EvaluationMetrics, ExpectedThreat
+from goldata.models.betting.kelly import kelly_fraction, kelly_stake
 from goldata.models.prediction.elo import EloRating
+from goldata.models.scouting.projection import PerformanceProjector
+from goldata.models.tactical.pressing import PressingAnalyzer
 from goldata.security import hash_personal_data
 
 

@@ -1,10 +1,10 @@
 """7 linhas finais para 100% de cobertura."""
 
-import pytest
+from unittest.mock import patch
+
 import numpy as np
 import pandas as pd
-from unittest.mock import patch, MagicMock
-
+import pytest
 
 # ══════════════════════════════════════════════════════════════════
 # models/base.py linha 84: return DataFrame com feature_importances_
@@ -12,8 +12,9 @@ from unittest.mock import patch, MagicMock
 
 def test_base_get_feature_importance_with_feature_importances_():
     """Cobre linha 84: método base chamado com _model que tem feature_importances_."""
-    from goldata.models.base import BaseMLModel, TrainResult
     from sklearn.ensemble import RandomForestClassifier
+
+    from goldata.models.base import BaseMLModel, TrainResult
 
     class RFModel(BaseMLModel):
         model_name = "RFTest"
@@ -41,10 +42,11 @@ def test_base_get_feature_importance_with_feature_importances_():
 
 def test_base_get_feature_importance_coef_branch(sample_shots_df):
     """Cobre linha 89: modelo com coef_ (Logistic Regression no pipeline)."""
-    from goldata.models.base import BaseMLModel, TrainResult
     from sklearn.linear_model import LogisticRegression
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import StandardScaler
+
+    from goldata.models.base import BaseMLModel, TrainResult
 
     class LRModel(BaseMLModel):
         model_name = "LRTest"
@@ -79,8 +81,8 @@ def test_base_get_feature_importance_coef_branch(sample_shots_df):
 
 def test_clustering_get_profiles_not_trained():
     """Cobre linha 155: get_cluster_profiles levanta quando não treinado."""
-    from goldata.models.scouting.clustering import PlayerClusterer
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.clustering import PlayerClusterer
     c = PlayerClusterer()
     c.is_trained = False  # explícito
     with pytest.raises(ModelNotTrainedError):
@@ -93,8 +95,8 @@ def test_clustering_get_profiles_not_trained():
 
 def test_similarity_score_not_trained():
     """Cobre linha 139: similarity_score levanta quando não treinado."""
-    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     from goldata.exceptions import ModelNotTrainedError
+    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     engine = PlayerSimilarityEngine()
     # is_trained=False e _player_vectors=None
     with pytest.raises(ModelNotTrainedError):
@@ -107,8 +109,8 @@ def test_similarity_score_not_trained():
 
 def test_transfers_overvalued_with_valuation_model():
     """Cobre linha 129 via find_overvalued com valuation model treinado."""
-    from goldata.models.transfers.analyzer import TransferAnalyzer
     from goldata.models.scouting.valuation import PlayerValuationModel
+    from goldata.models.transfers.analyzer import TransferAnalyzer
 
     feature_cols = ["goals_per_90","assists_per_90","xg_per_90","xa_per_90",
                     "shots_per_90","key_passes_per_90","progressive_passes_per_90",
@@ -139,7 +141,6 @@ def test_transfers_overvalued_with_valuation_model():
 def test_advanced_xg_shap_without_xtrain(sample_shots_df):
     """Cobre 165-166: branch quando _X_train é None no fallback de permutation."""
     import goldata.models.xg.advanced as adv
-    from goldata.models.xg.advanced import XG_ADVANCED_FEATURES
 
     model = adv.AdvancedXGModel(random_state=42)
     X = sample_shots_df
