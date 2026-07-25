@@ -1,6 +1,5 @@
 """Classe base abstrata para todos os modelos de ML do GolData."""
 
-import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -9,7 +8,7 @@ from typing import Any
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score, log_loss, brier_score_loss
+from sklearn.metrics import brier_score_loss, log_loss, roc_auc_score
 
 from goldata.exceptions import ModelNotTrainedError
 from goldata.logging_config import get_logger

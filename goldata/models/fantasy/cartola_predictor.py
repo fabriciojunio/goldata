@@ -1,9 +1,7 @@
 """Otimizador de escalação para Cartola FC usando programação linear (PuLP)."""
 
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
-import numpy as np
 import pandas as pd
 
 from goldata.logging_config import get_logger

@@ -22,6 +22,11 @@ COPY data/ data/
 # Criar diretório de dados
 RUN mkdir -p data/sample/brasileirao data/models data/cache
 
+# Usuário não root: reduz superfície de ataque em caso de comprometimento
+RUN groupadd --system goldata && useradd --system --gid goldata --home-dir /app goldata \
+    && chown -R goldata:goldata /app
+USER goldata
+
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \

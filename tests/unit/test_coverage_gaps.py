@@ -1,9 +1,10 @@
 ﻿"""Testes para cobrir branches específicos e chegar a 95%+ de cobertura."""
 
-import pytest
+from unittest.mock import MagicMock
+
 import numpy as np
 import pandas as pd
-from unittest.mock import patch, MagicMock
+import pytest
 
 # ── logging_config ────────────────────────────────────────────────────────────
 
@@ -32,6 +33,7 @@ def test_redact_sensitive_fields():
 
 def test_cache_disk_clear():
     import tempfile
+
     from goldata.cache import DiskCache
     with tempfile.TemporaryDirectory() as tmp:
         dc = DiskCache(cache_dir=tmp)
@@ -40,6 +42,7 @@ def test_cache_disk_clear():
 
 def test_cache_function_decorator():
     import tempfile
+
     from goldata.cache import DiskCache
     with tempfile.TemporaryDirectory() as tmp:
         dc = DiskCache(cache_dir=tmp)
@@ -97,8 +100,9 @@ def test_validate_odds_exactly_1():
 
 def test_base_model_get_feature_importance_coef():
     """Modelo com coef_ deve retornar importância baseada em coeficientes."""
-    from goldata.models.base import BaseMLModel, TrainResult
     import numpy as np
+
+    from goldata.models.base import BaseMLModel, TrainResult
 
     class MockLinearModel(BaseMLModel):
         model_name = "MockLinear"
@@ -202,8 +206,8 @@ def test_cartola_tec_prediction():
 # ── models/prediction/monte_carlo.py (linhas 57-59, 125, 128) ────────────────
 
 def test_monte_carlo_with_prediction_model():
-    from goldata.models.prediction.monte_carlo import LeagueSimulator
     from goldata.models.prediction.elo import EloRating
+    from goldata.models.prediction.monte_carlo import LeagueSimulator
 
     elo = EloRating()
     sim = LeagueSimulator(prediction_model=elo)
@@ -237,9 +241,9 @@ def test_monte_carlo_parallel():
 # ── models/transfers/analyzer.py (linhas 67-68: com valuation model) ─────────
 
 def test_transfers_with_valuation_model(sample_player_stats_df):
-    from goldata.models.transfers.analyzer import TransferAnalyzer
-    from goldata.models.scouting.valuation import PlayerValuationModel
     from goldata.data.features import FeatureEngineer
+    from goldata.models.scouting.valuation import PlayerValuationModel
+    from goldata.models.transfers.analyzer import TransferAnalyzer
 
     fe = FeatureEngineer()
     df = fe.normalize_player_stats_per90(sample_player_stats_df)
@@ -259,7 +263,7 @@ def test_transfers_with_valuation_model(sample_player_stats_df):
 
 def test_advanced_xg_lgbm_fallback():
     """Testar que o modelo funciona com ou sem LightGBM."""
-    from goldata.models.xg.advanced import AdvancedXGModel, _LGBM_AVAILABLE
+    from goldata.models.xg.advanced import _LGBM_AVAILABLE
     # O _LGBM_AVAILABLE já está setado: apenas verificar que é bool
     assert isinstance(_LGBM_AVAILABLE, bool)
 
@@ -274,7 +278,7 @@ def test_advanced_xg_shap_available():
 
 def test_clustering_profiles_empty_cluster():
     """K-Means pode criar clusters vazios em dados pequenos."""
-    from goldata.models.scouting.clustering import PlayerClusterer, CLUSTERING_FEATURES
+    from goldata.models.scouting.clustering import CLUSTERING_FEATURES, PlayerClusterer
     df = pd.DataFrame({f: np.random.uniform(0, 1, 20) for f in CLUSTERING_FEATURES})
     c = PlayerClusterer(n_clusters=3, random_state=42)
     c.fit(df)
@@ -299,6 +303,7 @@ def test_shotmap_with_goals_and_no_goals():
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
     from goldata.viz.pitch import plot_shot_map
 
     df = pd.DataFrame({
@@ -315,8 +320,8 @@ def test_shotmap_with_goals_and_no_goals():
 # ── models/scouting/similarity.py (linhas 139, 142, 150) ────────────────────
 
 def test_similarity_min_similarity_filter(sample_player_stats_df):
-    from goldata.models.scouting.similarity import PlayerSimilarityEngine
     from goldata.data.features import FeatureEngineer
+    from goldata.models.scouting.similarity import PlayerSimilarityEngine
 
     fe = FeatureEngineer()
     df = fe.normalize_player_stats_per90(sample_player_stats_df)
@@ -381,7 +386,6 @@ def test_dixon_coles_rho_correction_cases():
 
 def test_injury_risk_rest_map():
     """Diferentes classes de risco devem recomendar descansos diferentes."""
-    from goldata.models.injury.risk_predictor import InjuryRiskPredictor, INJURY_FEATURES
     rest_map = {0: 0, 1: 1, 2: 3, 3: 7}
     for cls, days in rest_map.items():
         assert days >= 0
@@ -394,7 +398,7 @@ def test_projection_trajectory_marks_current_age():
     proj = PerformanceProjector()
     player = {"age": 25, "position": "FW"}
     traj = proj.get_career_trajectory(player, age_range=(20, 30))
-    current = traj[traj["is_current_age"] == True]
+    current = traj[traj["is_current_age"]]
     assert len(current) == 1
     assert current.iloc[0]["age"] == 25
 

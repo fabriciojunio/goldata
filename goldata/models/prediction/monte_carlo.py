@@ -73,16 +73,18 @@ class LeagueSimulator:
             hg, ag = self._predict_match_outcome(home_team, away_team)
 
             if home_team in table.index:
-                table.loc[home_team, "goals_for"] = table.loc[home_team].get("goals_for", 0) + hg
-                table.loc[home_team, "goals_against"] = table.loc[home_team].get("goals_against", 0) + ag
+                home_row = table.loc[home_team]
+                table.loc[home_team, "goals_for"] = home_row.get("goals_for", 0) + hg
+                table.loc[home_team, "goals_against"] = home_row.get("goals_against", 0) + ag
                 if hg > ag:
                     table.loc[home_team, "points"] = table.loc[home_team].get("points", 0) + 3
                 elif hg == ag:
                     table.loc[home_team, "points"] = table.loc[home_team].get("points", 0) + 1
 
             if away_team in table.index:
-                table.loc[away_team, "goals_for"] = table.loc[away_team].get("goals_for", 0) + ag
-                table.loc[away_team, "goals_against"] = table.loc[away_team].get("goals_against", 0) + hg
+                away_row = table.loc[away_team]
+                table.loc[away_team, "goals_for"] = away_row.get("goals_for", 0) + ag
+                table.loc[away_team, "goals_against"] = away_row.get("goals_against", 0) + hg
                 if ag > hg:
                     table.loc[away_team, "points"] = table.loc[away_team].get("points", 0) + 3
                 elif ag == hg:
@@ -114,9 +116,15 @@ class LeagueSimulator:
         Returns:
             SimulationResult com distribuição de posições
         """
-        teams = current_table["team"].tolist() if "team" in current_table.columns else list(current_table.index)
+        teams = (
+            current_table["team"].tolist()
+            if "team" in current_table.columns
+            else list(current_table.index)
+        )
         n_teams = len(teams)
-        position_counts: dict[str, dict[int, int]] = {t: {p: 0 for p in range(1, n_teams + 1)} for t in teams}
+        position_counts: dict[str, dict[int, int]] = {
+            t: {p: 0 for p in range(1, n_teams + 1)} for t in teams
+        }
 
         def run_one(_: int) -> list[str]:
             sim_table = self._simulate_once(current_table, remaining_fixtures)
@@ -160,7 +168,8 @@ class LeagueSimulator:
                 team_position_probs[team].get(p, 0) for p in range(1, 7)
             )
             result.relegation_probs[team] = sum(
-                team_position_probs[team].get(p, 0) for p in range(n_teams - 3, n_teams + 1)
+                team_position_probs[team].get(p, 0)
+                for p in range(n_teams - 3, n_teams + 1)
             )
 
         logger.info(
@@ -174,19 +183,35 @@ class LeagueSimulator:
     def get_title_race(self, result: SimulationResult) -> pd.DataFrame:
         """Retorna DataFrame com probabilidade de título por time."""
         records = [{"team": t, "title_prob": p} for t, p in result.title_probs.items()]
-        return pd.DataFrame(records).sort_values("title_prob", ascending=False).reset_index(drop=True)
+        return (
+            pd.DataFrame(records)
+            .sort_values("title_prob", ascending=False)
+            .reset_index(drop=True)
+        )
 
     def get_relegation_battle(self, result: SimulationResult) -> pd.DataFrame:
         """Retorna DataFrame com probabilidade de rebaixamento por time."""
         records = [{"team": t, "relegation_prob": p} for t, p in result.relegation_probs.items()]
-        return pd.DataFrame(records).sort_values("relegation_prob", ascending=False).reset_index(drop=True)
+        return (
+            pd.DataFrame(records)
+            .sort_values("relegation_prob", ascending=False)
+            .reset_index(drop=True)
+        )
 
     def get_libertadores_race(self, result: SimulationResult) -> pd.DataFrame:
         """G4: Classificação para a Libertadores (Top 4 do Brasileirão)."""
         records = [{"team": t, "libertadores_prob": p} for t, p in result.top4_probs.items()]
-        return pd.DataFrame(records).sort_values("libertadores_prob", ascending=False).reset_index(drop=True)
+        return (
+            pd.DataFrame(records)
+            .sort_values("libertadores_prob", ascending=False)
+            .reset_index(drop=True)
+        )
 
     def get_sulamericana_race(self, result: SimulationResult) -> pd.DataFrame:
         """G6: Classificação para a Sul-Americana (Top 6 do Brasileirão)."""
         records = [{"team": t, "sulamericana_prob": p} for t, p in result.top6_probs.items()]
-        return pd.DataFrame(records).sort_values("sulamericana_prob", ascending=False).reset_index(drop=True)
+        return (
+            pd.DataFrame(records)
+            .sort_values("sulamericana_prob", ascending=False)
+            .reset_index(drop=True)
+        )

@@ -1,14 +1,15 @@
 ﻿"""Testes de visualizações: verifica que as funções retornam fig, ax sem erros."""
 
-import pytest
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
+import pytest
+
 matplotlib.use("Agg")  # sem display no CI
 import matplotlib.pyplot as plt
 
-from goldata.viz.pitch import draw_pitch, plot_shot_map, plot_heatmap
-from goldata.viz.radar import plot_player_radar, plot_comparison_radar
+from goldata.viz.pitch import draw_pitch, plot_heatmap, plot_shot_map
+from goldata.viz.radar import plot_comparison_radar, plot_player_radar
 
 
 @pytest.fixture(autouse=True)

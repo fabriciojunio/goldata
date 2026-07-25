@@ -1,12 +1,11 @@
 ﻿"""Modelo xG posicional: probabilidade por zona do campo com suavização Bayesiana."""
 
-from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 
-from goldata.models.base import BaseMLModel, TrainResult
 from goldata.logging_config import get_logger
+from goldata.models.base import BaseMLModel, TrainResult
 
 logger = get_logger(__name__)
 
@@ -61,7 +60,7 @@ class PositionalXGModel(BaseMLModel):
         x_vals = X["x"].values if "x" in X.columns else X.iloc[:, 0].values
         y_vals = X["y"].values if "y" in X.columns else X.iloc[:, 1].values
 
-        for xi, yi, goal in zip(x_vals, y_vals, y.values):
+        for xi, yi, goal in zip(x_vals, y_vals, y.values, strict=True):
             col, row = xy_to_zone(float(xi), float(yi))
             self._shot_counts[col, row] += 1
             self._goal_counts[col, row] += int(goal)
@@ -97,7 +96,7 @@ class PositionalXGModel(BaseMLModel):
         y_vals = X["y"].values if "y" in X.columns else X.iloc[:, 1].values
 
         probas = []
-        for xi, yi in zip(x_vals, y_vals):
+        for xi, yi in zip(x_vals, y_vals, strict=True):
             col, row = xy_to_zone(float(xi), float(yi))
             probas.append(self._xg_grid[col, row])
         return np.array(probas)

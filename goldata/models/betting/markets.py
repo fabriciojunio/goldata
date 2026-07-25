@@ -37,7 +37,9 @@ def _tau(h: int, a: int, lh: float, la: float, rho: float) -> float:
     return 1.0
 
 
-def score_matrix(home_xg: float, away_xg: float, rho: float = 0.0, max_goals: int = 12) -> np.ndarray:
+def score_matrix(
+    home_xg: float, away_xg: float, rho: float = 0.0, max_goals: int = 12
+) -> np.ndarray:
     """Matriz P[h, a] de probabilidade de cada placar (com correção DC opcional)."""
     lh = max(1e-6, float(home_xg))
     la = max(1e-6, float(away_xg))

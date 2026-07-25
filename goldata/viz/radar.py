@@ -1,9 +1,7 @@
 """Gráfico radar para comparação de perfis de jogadores."""
 
-import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-from matplotlib.patches import FancyArrowPatch
+import numpy as np
 
 
 def plot_player_radar(

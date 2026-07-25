@@ -1,10 +1,11 @@
 """Testes do modelo xG avançado."""
 
-import pytest
 import numpy as np
 import pandas as pd
-from goldata.models.xg.advanced import AdvancedXGModel, XG_ADVANCED_FEATURES
+import pytest
+
 from goldata.exceptions import ModelNotTrainedError
+from goldata.models.xg.advanced import XG_ADVANCED_FEATURES, AdvancedXGModel
 
 
 @pytest.fixture

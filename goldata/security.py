@@ -3,7 +3,7 @@
 import hashlib
 import html
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from cryptography.fernet import Fernet, InvalidToken
@@ -44,8 +44,8 @@ class EncryptionManager:
         """Decripta token. Lança SecurityError se inválido."""
         try:
             return self._fernet.decrypt(token.encode()).decode()
-        except (InvalidToken, Exception) as e:
-            raise SecurityError(f"Token inválido ou corrompido: {e}") from e
+        except InvalidToken as e:
+            raise SecurityError("Token inválido ou corrompido") from e
 
 
 # ── Sanitização de Input ──────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ def generate_consent_record(
         "user_id_hash": hash_personal_data(user_id),
         "purpose": purpose,
         "data_categories": data_categories,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "retention_days": DATA_RETENTION_DAYS,
         "legal_basis": "consent",
         "lgpd_article": "Art. 7, I - LGPD",
@@ -142,7 +142,7 @@ def export_user_data(user_id: str) -> dict[str, Any]:
     """
     return {
         "user_id_hash": hash_personal_data(user_id),
-        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "exported_at": datetime.now(UTC).isoformat(),
         "lgpd_article": "Art. 18, V - Portabilidade",
         "data": {},  # Em produção: buscar do DB
         "message": "Dados exportados conforme direito de portabilidade (LGPD Art. 18, V)",
@@ -157,7 +157,7 @@ def delete_user_data(user_id: str) -> bool:
     logger.info(
         "lgpd_deletion_requested",
         user_hash=hash_personal_data(user_id),
-        timestamp=datetime.now(timezone.utc).isoformat(),
+        timestamp=datetime.now(UTC).isoformat(),
         article="Art. 18, VI - Eliminação",
     )
     return True
@@ -194,5 +194,5 @@ class LGPDAuditLog:
             entity_id_hash=hash_personal_data(entity_id),
             purpose=purpose,
             user_hash=hash_personal_data(user_identifier),
-            timestamp=datetime.now(timezone.utc).isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
         )

@@ -4,8 +4,10 @@ import numpy as np
 import pandas as pd
 from sklearn.calibration import calibration_curve
 from sklearn.metrics import (
-    roc_auc_score, log_loss, brier_score_loss,
-    precision_recall_curve, average_precision_score,
+    average_precision_score,
+    brier_score_loss,
+    log_loss,
+    roc_auc_score,
 )
 
 from goldata.logging_config import get_logger

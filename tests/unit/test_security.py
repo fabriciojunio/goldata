@@ -1,6 +1,8 @@
 ﻿"""Testes do módulo de segurança e LGPD."""
 
 import pytest
+
+from goldata.exceptions import SecurityError
 from goldata.security import (
     EncryptionManager,
     LGPDAuditLog,
@@ -14,8 +16,6 @@ from goldata.security import (
     sanitize_string,
     validate_api_key,
 )
-from goldata.exceptions import SecurityError
-
 
 SECRET = "goldata-test-secret-key-32chars!!"
 

@@ -1,15 +1,15 @@
 """Testes dos módulos de scouting: clustering, similaridade, valuation, projeção."""
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
-from goldata.models.scouting.clustering import PlayerClusterer, CLUSTERING_FEATURES
+from goldata.data.features import FeatureEngineer
+from goldata.exceptions import DataNotFoundError, InsufficientDataError, ModelNotTrainedError
+from goldata.models.scouting.clustering import CLUSTERING_FEATURES, PlayerClusterer
+from goldata.models.scouting.projection import PerformanceProjector
 from goldata.models.scouting.similarity import PlayerSimilarityEngine
 from goldata.models.scouting.valuation import PlayerValuationModel
-from goldata.models.scouting.projection import PerformanceProjector, PEAK_WINDOWS
-from goldata.exceptions import ModelNotTrainedError, InsufficientDataError, DataNotFoundError
-from goldata.data.features import FeatureEngineer
 
 
 @pytest.fixture

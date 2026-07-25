@@ -1,7 +1,6 @@
 ﻿"""Conexão assíncrona com banco de dados: PostgreSQL ou SQLite (fallback)."""
 
 from collections.abc import AsyncGenerator
-from typing import Any
 
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,

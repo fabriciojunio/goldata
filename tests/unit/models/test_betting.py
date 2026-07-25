@@ -1,18 +1,22 @@
 """Testes dos módulos de betting: value detector, kelly e backtest."""
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
-from goldata.models.betting.value_detector import (
-    ValueBetDetector, ValueBet, odd_to_implied_prob, remove_bookmaker_margin
-)
-from goldata.models.betting.kelly import (
-    kelly_fraction, fractional_kelly, kelly_stake, KellyCriterion
-)
-from goldata.models.betting.backtest import BettingBacktest, BacktestResult
 from goldata.exceptions import InvalidInputError
-
+from goldata.models.betting.backtest import BacktestResult, BettingBacktest
+from goldata.models.betting.kelly import (
+    KellyCriterion,
+    fractional_kelly,
+    kelly_fraction,
+    kelly_stake,
+)
+from goldata.models.betting.value_detector import (
+    ValueBetDetector,
+    odd_to_implied_prob,
+    remove_bookmaker_margin,
+)
 
 # ── Utilitários ───────────────────────────────────────────────────────────────
 

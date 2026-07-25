@@ -4,9 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import cross_val_score
 
-from goldata.models.base import BaseMLModel, TrainResult
 from goldata.exceptions import ModelNotTrainedError
 from goldata.logging_config import get_logger
 

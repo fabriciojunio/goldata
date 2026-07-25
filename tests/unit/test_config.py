@@ -1,6 +1,7 @@
 """Testes da configuração do GolData."""
 
 import pytest
+
 from goldata.config import Settings, get_settings
 
 
@@ -11,10 +12,43 @@ def test_settings_default_values():
     assert s.environment == "development"
 
 
+_PROD_SECRET = "x" * 40
+_PROD_API_KEY = "prod-api-key-aleatoria"
+
+
 def test_settings_environment_values():
-    s = Settings(environment="production")
+    s = Settings(
+        environment="production",
+        secret_key=_PROD_SECRET,
+        api_key=_PROD_API_KEY,
+    )
     assert s.is_production is True
     assert s.is_development is False
+
+
+def test_production_rejects_default_secret_key():
+    with pytest.raises(Exception):
+        Settings(environment="production", api_key=_PROD_API_KEY)
+
+
+def test_production_rejects_default_api_key():
+    with pytest.raises(Exception):
+        Settings(environment="production", secret_key=_PROD_SECRET)
+
+
+def test_production_accepts_custom_secrets():
+    s = Settings(
+        environment="production",
+        secret_key=_PROD_SECRET,
+        api_key=_PROD_API_KEY,
+    )
+    assert s.secret_key == _PROD_SECRET
+    assert s.api_key == _PROD_API_KEY
+
+
+def test_development_allows_default_secrets():
+    s = Settings(environment="development")
+    assert s.is_development is True
 
 
 def test_settings_development_flag():

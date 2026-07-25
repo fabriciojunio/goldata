@@ -1,10 +1,8 @@
 """Visualizações de campo de futebol com matplotlib."""
 
-from typing import Any
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 FIELD_COLOR = "#1a7a3c"
@@ -119,7 +117,6 @@ def plot_shot_map(
     goals = shots_df[shots_df.get("is_goal", pd.Series([False] * len(shots_df))) == 1]
     non_goals = shots_df[shots_df.get("is_goal", pd.Series([False] * len(shots_df))) != 1]
 
-    xg_col = shots_df.get("xg", pd.Series([0.1] * len(shots_df)))
     size_scale = 200
 
     if len(non_goals) > 0:

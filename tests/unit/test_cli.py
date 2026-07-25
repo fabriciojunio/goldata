@@ -1,11 +1,11 @@
 """Testes da CLI do GolData."""
 
 import json
-import pytest
 from unittest.mock import patch
-from io import StringIO
 
-from goldata.cli import cmd_xg, cmd_standings, main
+import pytest
+
+from goldata.cli import cmd_standings, cmd_xg, main
 
 
 class FakeArgs:
@@ -55,9 +55,8 @@ def test_cli_standings_prints_table(capsys):
 
 
 def test_cli_main_no_command_exits(capsys):
-    with pytest.raises(SystemExit) as exc:
-        with patch("sys.argv", ["goldata"]):
-            main()
+    with pytest.raises(SystemExit) as exc, patch("sys.argv", ["goldata"]):
+        main()
     assert exc.value.code == 0
 
 

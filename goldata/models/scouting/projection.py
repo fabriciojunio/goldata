@@ -91,7 +91,11 @@ class PerformanceProjector:
         pos = position or str(player_stats.get("position", "MF"))
         multiplier = self._get_multiplier(current_age, target_age, pos)
 
-        projected = {"age": target_age, "position": pos, "projection_multiplier": round(multiplier, 4)}
+        projected = {
+            "age": target_age,
+            "position": pos,
+            "projection_multiplier": round(multiplier, 4),
+        }
 
         performance_metrics = [
             "goals_per_90", "assists_per_90", "xg_per_90", "xa_per_90",

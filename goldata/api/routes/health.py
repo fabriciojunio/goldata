@@ -1,6 +1,7 @@
 ﻿"""Rota de health check da API GolData."""
-from fastapi import APIRouter
 from datetime import datetime
+
+from fastapi import APIRouter
 
 router = APIRouter(prefix="/health", tags=["health"])
 

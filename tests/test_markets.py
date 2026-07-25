@@ -1,7 +1,5 @@
 """Testes dos mercados derivados (Over/Under, BTTS, Handicap Asiático)."""
 
-import numpy as np
-import pytest
 
 from goldata.models.betting.markets import (
     all_markets,

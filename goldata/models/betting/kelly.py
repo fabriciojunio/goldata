@@ -1,6 +1,5 @@
 ﻿"""Kelly Criterion para dimensionamento ótimo de apostas."""
 
-import numpy as np
 import pandas as pd
 
 from goldata.exceptions import InvalidInputError
@@ -138,10 +137,7 @@ class KellyCriterion:
         stake_info = self.calculate_stake(prob, odd)
         stake = stake_info["stake_amount"]
 
-        if won:
-            profit = round(stake * (odd - 1.0), 2)
-        else:
-            profit = -stake
+        profit = round(stake * (odd - 1.0), 2) if won else -stake
 
         self.bankroll = round(self.bankroll + profit, 2)
 
@@ -154,7 +150,9 @@ class KellyCriterion:
             "won": won,
             "profit": profit,
             "bankroll_after": self.bankroll,
-            "roi_cumulative": round((self.bankroll - self.initial_bankroll) / self.initial_bankroll, 4),
+            "roi_cumulative": round(
+                (self.bankroll - self.initial_bankroll) / self.initial_bankroll, 4
+            ),
         }
         self._bet_history.append(record)
         return record
@@ -184,6 +182,10 @@ class KellyCriterion:
             "current_bankroll": self.bankroll,
             "total_staked": round(float(total_staked), 2),
             "total_profit": round(float(total_profit), 2),
-            "roi": round(float((self.bankroll - self.initial_bankroll) / self.initial_bankroll), 4),
-            "yield_pct": round(float(total_profit / total_staked * 100) if total_staked > 0 else 0.0, 2),
+            "roi": round(
+                float((self.bankroll - self.initial_bankroll) / self.initial_bankroll), 4
+            ),
+            "yield_pct": round(
+                float(total_profit / total_staked * 100) if total_staked > 0 else 0.0, 2
+            ),
         }

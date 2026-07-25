@@ -78,14 +78,18 @@ class PressingAnalyzer:
             DataFrame com team_id, ppda_avg, ppda_min, ppda_max, matches_analyzed
         """
         results = []
-        unique_teams = set(events_df["team_id"].unique()) if "team_id" in events_df.columns else set()
+        unique_teams = (
+            set(events_df["team_id"].unique()) if "team_id" in events_df.columns else set()
+        )
 
         for team in team_ids:
             if team not in unique_teams:
                 continue
 
             match_ppda_values = []
-            match_ids = events_df["match_id"].unique() if "match_id" in events_df.columns else [None]
+            match_ids = (
+                events_df["match_id"].unique() if "match_id" in events_df.columns else [None]
+            )
 
             for match_id in match_ids:
                 if match_id is not None:

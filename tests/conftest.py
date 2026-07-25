@@ -1,8 +1,8 @@
 """Fixtures compartilhadas para toda a suíte de testes do GolData."""
 
-import pytest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import pytest
 
 
 @pytest.fixture

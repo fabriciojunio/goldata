@@ -1,13 +1,13 @@
 """Testes do modelo xG básico."""
 
-import tempfile
 import os
-import pytest
+
 import numpy as np
 import pandas as pd
-from goldata.models.xg.basic import BasicXGModel, XG_BASIC_FEATURES
+import pytest
+
 from goldata.exceptions import ModelNotTrainedError
-from goldata.data.features import FeatureEngineer
+from goldata.models.xg.basic import XG_BASIC_FEATURES, BasicXGModel
 
 
 @pytest.fixture

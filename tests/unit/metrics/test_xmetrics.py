@@ -1,10 +1,10 @@
 """Testes das métricas avançadas: xT e calibração."""
 
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
 
-from goldata.metrics.xmetrics import ExpectedThreat, EvaluationMetrics, XT_GRID_X, XT_GRID_Y
+from goldata.metrics.xmetrics import XT_GRID_X, XT_GRID_Y, EvaluationMetrics, ExpectedThreat
 
 
 @pytest.fixture
