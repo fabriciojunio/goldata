@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import StandardScaler
 
-from goldata.exceptions import ModelNotTrainedError, DataNotFoundError
+from goldata.exceptions import DataNotFoundError, ModelNotTrainedError
 from goldata.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -66,14 +66,22 @@ class PlayerSimilarityEngine:
         name_col = "display_name" if "display_name" in stats_df.columns else None
 
         self._player_ids = (
-            stats_df[id_col].astype(str).tolist() if id_col else [str(i) for i in range(len(stats_df))]
+            stats_df[id_col].astype(str).tolist()
+            if id_col
+            else [str(i) for i in range(len(stats_df))]
         )
         if name_col:
-            self._player_names = dict(zip(self._player_ids, stats_df[name_col].astype(str)))
+            self._player_names = dict(
+                zip(self._player_ids, stats_df[name_col].astype(str), strict=True)
+            )
         if "position" in stats_df.columns:
-            self._player_positions = dict(zip(self._player_ids, stats_df["position"].astype(str)))
+            self._player_positions = dict(
+                zip(self._player_ids, stats_df["position"].astype(str), strict=True)
+            )
         if "team" in stats_df.columns:
-            self._player_teams = dict(zip(self._player_ids, stats_df["team"].astype(str)))
+            self._player_teams = dict(
+                zip(self._player_ids, stats_df["team"].astype(str), strict=True)
+            )
 
         X = self._prepare_features(stats_df)
         X_scaled = self._scaler.fit_transform(X)
@@ -114,14 +122,17 @@ class PlayerSimilarityEngine:
 
         target_position = self._player_positions.get(player_id)
         results = []
-        for i, (pid, score) in enumerate(zip(self._player_ids, scores)):
+        for pid, score in zip(self._player_ids, scores, strict=True):
             if pid == player_id:
                 continue
             if score < min_similarity:
                 continue
-            if same_position and target_position:
-                if self._player_positions.get(pid) != target_position:
-                    continue
+            if (
+                same_position
+                and target_position
+                and self._player_positions.get(pid) != target_position
+            ):
+                continue
             results.append(SimilarPlayer(
                 player_id=pid,
                 display_name=self._player_names.get(pid, pid),

@@ -2,12 +2,11 @@
 
 from dataclasses import dataclass
 
-import numpy as np
 import pandas as pd
 
-from goldata.models.scouting.valuation import PlayerValuationModel
-from goldata.models.scouting.similarity import PlayerSimilarityEngine
 from goldata.logging_config import get_logger
+from goldata.models.scouting.similarity import PlayerSimilarityEngine
+from goldata.models.scouting.valuation import PlayerValuationModel
 
 logger = get_logger(__name__)
 
@@ -75,8 +74,8 @@ class TransferAnalyzer:
                 estimated_val = float(self._valuation.predict(pd.DataFrame([row.to_dict()]))[0])
             else:
                 # Fallback simples baseado em xG e assists
-                xg = float(row.get("xg_per_90", 0)) if "xg_per_90" in row.index else float(row.get("xg", 0))
-                xa = float(row.get("xa_per_90", 0)) if "xa_per_90" in row.index else float(row.get("xa", 0))
+                xg = float(row.get("xg_per_90" if "xg_per_90" in row.index else "xg", 0))
+                xa = float(row.get("xa_per_90" if "xa_per_90" in row.index else "xa", 0))
                 age = float(row.get("age", 26))
                 estimated_val = (xg * 20 + xa * 12 + max(0, (30 - age)) * 0.3)
                 estimated_val = max(0.5, estimated_val)
@@ -91,8 +90,8 @@ class TransferAnalyzer:
                     try:
                         sims = self._similarity.find_similar(pid, n=3)
                         similar = [s.display_name for s in sims]
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        logger.debug("similaridade_indisponivel", player_id=pid, error=str(exc))
 
                 rec = "Comprar" if gap_pct >= 0.30 else "Observar"
                 opportunities.append(TransferOpportunity(
@@ -128,8 +127,8 @@ class TransferAnalyzer:
             if self._valuation and self._valuation.is_trained:
                 estimated_val = float(self._valuation.predict(pd.DataFrame([row.to_dict()]))[0])
             else:
-                xg = float(row.get("xg_per_90", 0)) if "xg_per_90" in row.index else float(row.get("xg", 0))
-                xa = float(row.get("xa_per_90", 0)) if "xa_per_90" in row.index else float(row.get("xa", 0))
+                xg = float(row.get("xg_per_90" if "xg_per_90" in row.index else "xg", 0))
+                xa = float(row.get("xa_per_90" if "xa_per_90" in row.index else "xa", 0))
                 age = float(row.get("age", 26))
                 estimated_val = max(0.5, xg * 20 + xa * 12 + max(0, (30 - age)) * 0.3)
 
@@ -174,7 +173,12 @@ class TransferAnalyzer:
             return pd.DataFrame()
 
         similar_ids = [s.player_id for s in similar]
-        similar_df = players_df[players_df.get("player_id", pd.Series()).isin(similar_ids)].copy() if "player_id" in players_df.columns else pd.DataFrame()
+        if "player_id" in players_df.columns:
+            similar_df = players_df[
+                players_df.get("player_id", pd.Series()).isin(similar_ids)
+            ].copy()
+        else:
+            similar_df = pd.DataFrame()
 
         if len(similar_df) == 0:
             return pd.DataFrame(

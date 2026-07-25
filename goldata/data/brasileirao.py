@@ -1,14 +1,12 @@
 """Cliente de dados do Brasileirão Série A e B."""
 
-import os
 from pathlib import Path
-from typing import Any
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from goldata.logging_config import get_logger
 from goldata.cache import CacheManager
+from goldata.logging_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -63,7 +61,7 @@ class BrasileiraoDataClient:
         points = sorted(np.random.randint(20, 80, n), reverse=True)
         wins = [int(p * 0.32) for p in points]
         draws = [int(p * 0.15) for p in points]
-        losses = [38 - w - d for w, d in zip(wins, draws)]
+        losses = [38 - w - d for w, d in zip(wins, draws, strict=True)]
         data = {
             "position": range(1, n + 1),
             "team": teams,

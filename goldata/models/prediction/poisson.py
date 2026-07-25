@@ -1,7 +1,6 @@
 """Modelo de previsão de resultados usando Poisson bivariado com MLE."""
 
 import warnings
-from typing import Any
 
 import numpy as np
 import pandas as pd

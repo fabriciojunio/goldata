@@ -3,25 +3,22 @@
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI, Depends, HTTPException, Request, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from goldata.config import get_settings
-from goldata.logging_config import configure_logging, get_logger
-from goldata.security import validate_api_key
 from goldata.data.features import FeatureEngineer
-from goldata.models.xg.basic import BasicXGModel, XG_BASIC_FEATURES
-from goldata.models.xg.positional import PositionalXGModel
-from goldata.models.prediction.elo import EloRating
-from goldata.models.prediction.poisson import BivariatePoisson
-from goldata.models.betting.value_detector import ValueBetDetector, odd_to_implied_prob
-from goldata.models.betting.kelly import kelly_stake
+from goldata.logging_config import configure_logging, get_logger
 from goldata.metrics.xmetrics import ExpectedThreat
+from goldata.models.betting.kelly import kelly_stake
+from goldata.models.betting.value_detector import ValueBetDetector
+from goldata.models.prediction.elo import EloRating
+from goldata.models.xg.basic import BasicXGModel
+from goldata.security import validate_api_key
 
 settings = get_settings()
 logger = get_logger(__name__)
@@ -249,11 +246,17 @@ async def calculate_xt(
 ) -> dict[str, Any]:
     """Calcula o Expected Threat (xT) de uma posição."""
     xt_value = xt_engine.get_xt_value(pos.x, pos.y)
+    if pos.x > 80:
+        zone = "attacking_third"
+    elif pos.x > 40:
+        zone = "middle_third"
+    else:
+        zone = "defensive_third"
     return {
         "x": pos.x,
         "y": pos.y,
         "xt": round(xt_value, 6),
-        "zone": "attacking_third" if pos.x > 80 else "middle_third" if pos.x > 40 else "defensive_third",
+        "zone": zone,
     }
 
 

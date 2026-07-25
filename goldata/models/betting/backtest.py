@@ -1,13 +1,12 @@
 """Backtesting de estratégias de apostas com walk-forward validation."""
 
 from dataclasses import dataclass, field
-from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from goldata.models.betting.kelly import KellyCriterion, fractional_kelly
 from goldata.logging_config import get_logger
+from goldata.models.betting.kelly import fractional_kelly
 
 logger = get_logger(__name__)
 

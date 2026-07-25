@@ -1,6 +1,5 @@
 """Sistema de rating Elo para times de futebol."""
 
-import math
 from dataclasses import dataclass, field
 from datetime import datetime
 

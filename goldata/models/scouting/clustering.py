@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
-from goldata.exceptions import ModelNotTrainedError, InsufficientDataError
+from goldata.exceptions import InsufficientDataError, ModelNotTrainedError
 from goldata.logging_config import get_logger
 
 logger = get_logger(__name__)

@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 from xgboost import XGBClassifier
 
-from goldata.models.base import BaseMLModel, TrainResult
 from goldata.logging_config import get_logger
+from goldata.models.base import BaseMLModel, TrainResult
 
 logger = get_logger(__name__)
 
@@ -36,7 +36,6 @@ try:
     import shap
     _SHAP_AVAILABLE = True
 except ImportError:
-    from sklearn.inspection import permutation_importance
     _SHAP_AVAILABLE = False
     logger.warning("shap_unavailable_using_permutation_importance")
 
@@ -173,7 +172,3 @@ class AdvancedXGModel(BaseMLModel):
             "feature": XG_ADVANCED_FEATURES,
             "importance": self._xgb.feature_importances_,
         }).sort_values("importance", ascending=False).reset_index(drop=True)
-
-
-# Corrigir import faltando
-from typing import Any

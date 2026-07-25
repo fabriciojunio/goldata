@@ -7,8 +7,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from goldata.models.base import BaseMLModel, TrainResult
 from goldata.logging_config import get_logger
+from goldata.models.base import BaseMLModel, TrainResult
 
 logger = get_logger(__name__)
 
