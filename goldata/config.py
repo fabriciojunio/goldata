@@ -3,8 +3,12 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Valores padrão de desenvolvimento que jamais podem ir para produção.
+_DEFAULT_SECRET_KEY = "goldata-dev-secret-key-change-in-production-32chars!!"
+_DEFAULT_API_KEY = "goldata-dev-api-key"
 
 
 class Settings(BaseSettings):
@@ -36,11 +40,11 @@ class Settings(BaseSettings):
 
     # Segurança
     secret_key: str = Field(
-        default="goldata-dev-secret-key-change-in-production-32chars!!",
+        default=_DEFAULT_SECRET_KEY,
         description="Chave secreta para JWT e Fernet",
     )
     api_key: str = Field(
-        default="goldata-dev-api-key",
+        default=_DEFAULT_API_KEY,
         description="API Key para autenticação dos endpoints",
     )
 
@@ -68,6 +72,22 @@ class Settings(BaseSettings):
         if len(v) < 32:
             raise ValueError("SECRET_KEY deve ter pelo menos 32 caracteres")
         return v
+
+    @model_validator(mode="after")
+    def reject_default_secrets_in_production(self) -> "Settings":
+        """Impede subir em produção com os segredos padrão de desenvolvimento."""
+        if self.environment == "production":
+            if self.secret_key == _DEFAULT_SECRET_KEY:
+                raise ValueError(
+                    "SECRET_KEY padrão detectada em produção. Defina a variável "
+                    "de ambiente SECRET_KEY com um valor aleatório (openssl rand -hex 32)."
+                )
+            if self.api_key == _DEFAULT_API_KEY:
+                raise ValueError(
+                    "API_KEY padrão detectada em produção. Defina a variável "
+                    "de ambiente API_KEY com um valor aleatório."
+                )
+        return self
 
     @property
     def is_production(self) -> bool:

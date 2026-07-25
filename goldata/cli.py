@@ -1,8 +1,8 @@
 ﻿"""CLI do GolData: comandos de linha de comando."""
 
 import argparse
-import sys
 import json
+import sys
 
 
 def cmd_xg(args: argparse.Namespace) -> None:
@@ -28,8 +28,14 @@ def cmd_standings(args: argparse.Namespace) -> None:
     print("-" * 45)
     for _, row in df.head(20).iterrows():
         pos = int(row.get("position", 0))
-        print(f"{pos:>3} {row['team']:<20} {int(row['points']):>4} {int(row.get('matches', 38)):>3} "
-              f"{int(row.get('wins', 0)):>3} {int(row.get('draws', 0)):>3} {int(row.get('losses', 0)):>3}")
+        wins = int(row.get("wins", 0))
+        draws = int(row.get("draws", 0))
+        losses = int(row.get("losses", 0))
+        matches = int(row.get("matches", 38))
+        print(
+            f"{pos:>3} {row['team']:<20} {int(row['points']):>4} {matches:>3} "
+            f"{wins:>3} {draws:>3} {losses:>3}"
+        )
 
 
 def cmd_serve(args: argparse.Namespace) -> None:
@@ -63,7 +69,11 @@ def main() -> None:
 
     # serve
     srv_parser = sub.add_parser("serve", help="Iniciar API FastAPI")
-    srv_parser.add_argument("--host", default="0.0.0.0")
+    srv_parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Endereço de bind (padrão: 127.0.0.1). Use 0.0.0.0 para expor na rede.",
+    )
     srv_parser.add_argument("--port", type=int, default=8000)
     srv_parser.add_argument("--reload", action="store_true")
 
